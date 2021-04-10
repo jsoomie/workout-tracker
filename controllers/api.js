@@ -1,18 +1,7 @@
 const router = require("express").Router();
 const { Workout } = require("../models");
 
-// postman to see if things work
-router.get("/workouts", async (req, res) => {
-    try {
-        console.log("Hello world");
-        res.send("Hello World");
-    } catch (err) {
-        console.log(err);
-        res.json(err);
-    }
-});
-
-// to post a new workout
+// API createworkout
 router.post("/workouts", async (req, res) => {
     try {
         console.log("Reached /api/workouts");
@@ -21,7 +10,40 @@ router.post("/workouts", async (req, res) => {
         res.status(200).json(workout);
     } catch (err) {
         console.log(err);
-        res.json(err);
+        res.status(500).json(err);
+    }
+});
+
+// API addExercise
+router.put("/workouts/:id", async ({ body, params }, res) => {
+    try {
+        const workout = await Workout.findByIdAndUpdate(
+            params.id,
+            {
+                $push: { exercises: body },
+            },
+            {
+                new: true,
+                runValidators: true,
+            }
+        );
+
+        res.status(200).json(workout);
+    } catch (err) {
+        console.log(err);
+        res.status(500).json(err);
+    }
+});
+
+// API getLastWorkout
+router.get("/workouts", async (req, res) => {
+    try {
+        const workout = await Workout.find({});
+
+        res.status(200).json(workout);
+    } catch (err) {
+        console.log(err);
+        res.status(500).json(err);
     }
 });
 
