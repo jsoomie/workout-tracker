@@ -24,7 +24,18 @@ app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-db.now("error", console.error.bind(console, "connection error:"));
+const mongoose = require("mongoose");
+
+const host = "localhost";
+const db_name = "workout";
+const mongo = process.env.MONGODB_URI;
+
+mongoose.connect(mongo || `mongodb://${host}/${db_name}`, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+    useFindAndModify: false,
+});
 
 // Routes
 app.use(router);
