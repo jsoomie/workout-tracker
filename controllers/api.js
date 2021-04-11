@@ -60,7 +60,6 @@ router.get("/", async (req, res) => {
 router.get("/range", async (req, res) => {
     try {
         // const workout = await Workout.find({});
-
         const workout = await Workout.aggregate([
             {
                 $addFields: {
