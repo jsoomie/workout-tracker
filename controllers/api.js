@@ -59,7 +59,17 @@ router.get("/", async (req, res) => {
 // API getWorkoutsInRange
 router.get("/range", async (req, res) => {
     try {
-        const workout = await Workout.find({});
+        // const workout = await Workout.find({});
+
+        const workout = await Workout.aggregate([
+            {
+                $addFields: {
+                    totalDuration: {
+                        $sum: "$exercises.duration",
+                    },
+                },
+            },
+        ]);
 
         res.status(200).json(workout);
     } catch (err) {
